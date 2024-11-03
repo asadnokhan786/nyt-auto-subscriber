@@ -10,6 +10,7 @@
 - [ ] Implement logging
 - [ ] Crate a routine check to run the redeem request at an interval specified by the user (1 day by default)
 - [ ] Store credentials for redeeming in a  .env file
+- [ ] Create script for making sure chrome is installed in operating system's default location
 - [ ] Create cli interface for entering username, password, and code for persistent use
 - [ ] Create cli interface for modifying routine update for redeming code
 - [ ] Create automated tseting for cli comamnds
