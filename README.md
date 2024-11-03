@@ -5,12 +5,13 @@
 - This program aims to automate that process by using Selenium to auto-redeem your subscription codes based on user account email and password in a timely fashion, thus giving the user the impression they always have premium subscribtion of the *New York Times*
 
 ## TODO
-- [ ] Create function for redeeming the code
+- [ ] Create function for redeeming the codes
 - [ ] Create automated testing for selenium function
+- [ ] Implement logging
 - [ ] Crate a routine check to run the redeem request at an interval specified by the user (1 day by default)
 - [ ] Store credentials for redeeming in a  .env file
 - [ ] Create cli interface for entering username, password, and code for persistent use
 - [ ] Create cli interface for modifying routine update for redeming code
 - [ ] Create automated tseting for cli comamnds
-- [ ] Create a setup script to automatically setup python virtual environment
+- [ ] Create a setup script to automatically setup python virtual environment       
 - [ ] Create docker image for program for easy self deployment
