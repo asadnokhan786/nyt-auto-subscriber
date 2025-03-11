@@ -6,6 +6,9 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 from logger_config import logger
 
@@ -25,14 +28,28 @@ def redeem_code(driver, nyt_code):
     logger.debug("Going to https://www.nytimes.com/redeem...")
     driver.get("https://www.nytimes.com/redeem")
 
-    time.sleep(6)
+    time.sleep(5)
+    try:
+        # Use the 'xpath' to locate the button
+        continue_button = WebDriverWait(driver, 10).until(
+                EC.visibility_of_element_located((By.XPATH, "//button[contains(@class, 'css-j07ljx') and contains(., 'Continue')]"))
+            )
+
+        # Click the button
+        continue_button.click()
+        logger.debug("The first continue button did pop up and we did click it!")
+
+    except Exception as e:
+        logger.debug(f"Error form that first continue button: {e}")
+
+    time.sleep(2)
 
     code_field = driver.find_element(By.NAME, "code")
     logger.debug(f"Clearing any initial value in {code_field}...")
     code_field.clear()
     enter_field(code_field, nyt_code)
 
-    time.sleep(2)
+    time.sleep(4)
 
     logger.debug("Submitting provided code...")
     redeem_button = driver.find_element(By.CSS_SELECTOR, "button[data-testid='btn-redeem']")
@@ -42,17 +59,18 @@ def redeem_code(driver, nyt_code):
 
 def redeem_login(driver, nyt_email, nyt_password):
     logger.debug("Running redeem_login() function...")
+    time.sleep(10)
     email_field = driver.find_element(By.NAME, "email")
     enter_field(email_field, nyt_email)
 
-    time.sleep(2)
+    time.sleep(4)
 
     logger.debug("Submitting provided email...")
     email_login_button = driver.find_element(By.CSS_SELECTOR, '[data-testid="submit-email"]')
     email_login_button.click()
     logger.debug("Successfully submitted email")
     
-    time.sleep(2)
+    time.sleep(6)
 
     password_field = driver.find_element(By.NAME, "password")
     enter_field(password_field, nyt_password)
@@ -80,19 +98,19 @@ def finish_redeem(driver):
     continue_first.click()
     logger.debug("Checkpoint 1 successfully cleared")
 
-    time.sleep(2)
+    time.sleep(4)
 
     continue_second = driver.find_element(By.CSS_SELECTOR, '[data-testid="welcome-screen-button"]')
     continue_second.click()
     logger.debug("Checkpoint 2 successfully cleared")
 
-    time.sleep(2)
+    time.sleep(7)
 
     newsletter_signup_sheet_button = driver.find_element(By.CSS_SELECTOR, '[data-testid="newsletter-signup-sheet-button"]')
     newsletter_signup_sheet_button.click()
     logger.debug("Checkpoint 3 successfully cleared")
 
-    time.sleep(2)
+    time.sleep(8)
 
     continue_without_sms = driver.find_element(By.CSS_SELECTOR, '[data-testid="continue-without-sms"]')
     continue_without_sms.click()
@@ -111,7 +129,9 @@ def auto_subscribe_nyt():
 
     logger.debug("Adding headless options for selenium...")
     options = Options()
-    options.add_argument("--headless")  # Run in headless mode
+    options.add_argument("window-size=1243x783")
+    options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
     options.add_argument("--no-sandbox")  # Needed for some environments
     options.add_argument("--disable-dev-shm-usage")  # Helps in Docker
 
